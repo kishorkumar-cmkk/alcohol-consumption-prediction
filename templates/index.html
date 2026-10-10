@@ -1,0 +1,1179 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="Global alcohol consumption analytics and machine learning prediction dashboard."
+    >
+
+    <title>
+        Alcohol Consumption Analytics
+    </title>
+
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/chart.js"
+    ></script>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     NAVBAR
+===================================================== -->
+
+<nav class="navbar">
+
+    <div class="logo">
+
+        <div class="logo-icon">
+            A
+        </div>
+
+        <div>
+
+            <span>
+                Alcohol
+            </span>
+
+            <strong>
+                Analytics
+            </strong>
+
+        </div>
+
+    </div>
+
+
+    <div class="nav-links">
+
+        <a
+            href="{{ url_for('home') }}"
+            class="active"
+        >
+            Dashboard
+        </a>
+
+        <a
+            href="{{ url_for('predict') }}"
+        >
+            Predict
+        </a>
+
+    </div>
+
+</nav>
+
+
+
+<!-- =====================================================
+     HERO
+===================================================== -->
+
+<section class="hero">
+
+    <div class="hero-content">
+
+        <span class="hero-tag">
+            MACHINE LEARNING • REGRESSION
+        </span>
+
+
+        <h1>
+
+            Global Alcohol
+
+            <span>
+                Consumption Analytics
+            </span>
+
+        </h1>
+
+
+        <p>
+
+            Explore global alcohol consumption patterns
+            across countries and continents and use
+            machine learning to estimate total litres
+            of pure alcohol consumption from beer,
+            spirit and wine servings.
+
+        </p>
+
+
+        <div class="hero-buttons">
+
+            <a
+                href="{{ url_for('predict') }}"
+                class="primary-btn"
+            >
+                Make a Prediction →
+            </a>
+
+
+            <a
+                href="#analytics"
+                class="secondary-btn"
+            >
+                Explore Data
+            </a>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- MODEL CARD -->
+
+    <div class="hero-visual">
+
+        <div class="visual-card">
+
+            <span>
+                Selected Model
+            </span>
+
+
+            <h2>
+                Linear Regression
+            </h2>
+
+
+            <div class="score">
+
+                <strong>
+                    94.68%
+                </strong>
+
+                <small>
+                    R² Score
+                </small>
+
+            </div>
+
+
+            <div class="model-line"></div>
+
+
+            <p>
+
+                Selected after comparing Linear
+                Regression, Random Forest and Gradient
+                Boosting models on the evaluation data.
+
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     DATA OVERVIEW
+===================================================== -->
+
+<section
+    class="section"
+    id="analytics"
+>
+
+    <div class="section-heading">
+
+        <span>
+            DATA OVERVIEW
+        </span>
+
+        <h2>
+            Dataset at a Glance
+        </h2>
+
+        <p>
+
+            Key indicators calculated directly
+            from the global alcohol consumption
+            dataset.
+
+        </p>
+
+    </div>
+
+
+
+    <div class="kpi-grid">
+
+
+        <!-- COUNTRIES -->
+
+        <div class="kpi-card">
+
+            <div class="kpi-icon">
+                🌍
+            </div>
+
+            <div>
+
+                <p>
+                    Countries
+                </p>
+
+                <h3>
+                    {{ total_countries }}
+                </h3>
+
+                <small>
+                    represented in dataset
+                </small>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- BEER -->
+
+        <div class="kpi-card">
+
+            <div class="kpi-icon">
+                🍺
+            </div>
+
+            <div>
+
+                <p>
+                    Avg Beer Servings
+                </p>
+
+                <h3>
+                    {{ avg_beer }}
+                </h3>
+
+                <small>
+                    servings
+                </small>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- SPIRIT -->
+
+        <div class="kpi-card">
+
+            <div class="kpi-icon">
+                🥃
+            </div>
+
+            <div>
+
+                <p>
+                    Avg Spirit Servings
+                </p>
+
+                <h3>
+                    {{ avg_spirit }}
+                </h3>
+
+                <small>
+                    servings
+                </small>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- WINE -->
+
+        <div class="kpi-card">
+
+            <div class="kpi-icon">
+                🍷
+            </div>
+
+            <div>
+
+                <p>
+                    Avg Wine Servings
+                </p>
+
+                <h3>
+                    {{ avg_wine }}
+                </h3>
+
+                <small>
+                    servings
+                </small>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <div class="average-card">
+
+        <div>
+
+            <span>
+                GLOBAL AVERAGE
+            </span>
+
+            <h3>
+                {{ avg_alcohol }} L
+            </h3>
+
+        </div>
+
+
+        <p>
+
+            Average total litres of pure alcohol
+            recorded across countries in the dataset.
+
+        </p>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     INFOGRAPHICS
+===================================================== -->
+
+<section class="section charts-section">
+
+    <div class="section-heading">
+
+        <span>
+            INFOGRAPHICS
+        </span>
+
+        <h2>
+            Consumption Insights
+        </h2>
+
+        <p>
+
+            Visual analysis of alcohol consumption
+            patterns across continents, countries
+            and beverage types.
+
+        </p>
+
+    </div>
+
+
+
+    <div class="chart-grid">
+
+
+        <!-- CONTINENT CHART -->
+
+        <div class="chart-card">
+
+            <div class="chart-title">
+
+                <span>
+                    CONTINENT ANALYSIS
+                </span>
+
+                <h3>
+                    Average Alcohol Consumption
+                </h3>
+
+            </div>
+
+
+            <div class="chart-container">
+
+                <canvas
+                    id="continentChart"
+                ></canvas>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- BEVERAGE CHART -->
+
+        <div class="chart-card">
+
+            <div class="chart-title">
+
+                <span>
+                    BEVERAGE ANALYSIS
+                </span>
+
+                <h3>
+                    Average Servings by Type
+                </h3>
+
+            </div>
+
+
+            <div class="chart-container">
+
+                <canvas
+                    id="beverageChart"
+                ></canvas>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- COUNTRY CHART -->
+
+    <div class="chart-card large-chart">
+
+        <div class="chart-title">
+
+            <span>
+                COUNTRY ANALYSIS
+            </span>
+
+            <h3>
+                Top 10 Countries by Total
+                Alcohol Consumption
+            </h3>
+
+        </div>
+
+
+        <div class="large-chart-container">
+
+            <canvas
+                id="countryChart"
+            ></canvas>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     MODEL PERFORMANCE
+===================================================== -->
+
+<section class="model-section">
+
+    <div class="model-content">
+
+        <span class="hero-tag">
+            MODEL PERFORMANCE
+        </span>
+
+
+        <h2>
+            Why Linear Regression?
+        </h2>
+
+
+        <p>
+
+            Multiple regression algorithms were trained
+            and evaluated. Hyperparameter tuning was
+            performed on Random Forest and Gradient
+            Boosting using cross-validation.
+
+            Linear Regression achieved the highest R²
+            score on the evaluation data and was
+            therefore selected as the final deployment
+            model.
+
+        </p>
+
+
+
+        <div class="model-results">
+
+
+            <div>
+
+                <span>
+                    Linear Regression
+                </span>
+
+                <strong>
+                    0.9468
+                </strong>
+
+            </div>
+
+
+
+            <div>
+
+                <span>
+                    Tuned Gradient Boosting
+                </span>
+
+                <strong>
+                    0.9377
+                </strong>
+
+            </div>
+
+
+
+            <div>
+
+                <span>
+                    Tuned Random Forest
+                </span>
+
+                <strong>
+                    0.8912
+                </strong>
+
+            </div>
+
+        </div>
+
+
+
+        <a
+            href="{{ url_for('predict') }}"
+            class="primary-btn"
+        >
+            Try the Prediction Model →
+        </a>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     ML WORKFLOW
+===================================================== -->
+
+<section class="section charts-section">
+
+    <div class="section-heading">
+
+        <span>
+            MACHINE LEARNING WORKFLOW
+        </span>
+
+        <h2>
+            From Data to Prediction
+        </h2>
+
+        <p>
+
+            The project follows a complete regression
+            workflow from preprocessing and model
+            comparison to Flask deployment.
+
+        </p>
+
+    </div>
+
+
+
+    <div class="kpi-grid">
+
+
+        <div class="kpi-card">
+
+            <div class="kpi-icon">
+                01
+            </div>
+
+            <div>
+
+                <p>
+                    Data Preparation
+                </p>
+
+                <h3>
+                    Cleaning
+                </h3>
+
+                <small>
+                    missing values and validation
+                </small>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="kpi-card">
+
+            <div class="kpi-icon">
+                02
+            </div>
+
+            <div>
+
+                <p>
+                    Feature Processing
+                </p>
+
+                <h3>
+                    Encoding
+                </h3>
+
+                <small>
+                    numerical and categorical features
+                </small>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="kpi-card">
+
+            <div class="kpi-icon">
+                03
+            </div>
+
+            <div>
+
+                <p>
+                    Model Development
+                </p>
+
+                <h3>
+                    Regression
+                </h3>
+
+                <small>
+                    multiple models compared
+                </small>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="kpi-card">
+
+            <div class="kpi-icon">
+                04
+            </div>
+
+            <div>
+
+                <p>
+                    Deployment
+                </p>
+
+                <h3>
+                    Flask
+                </h3>
+
+                <small>
+                    interactive web prediction
+                </small>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<footer>
+
+    <p>
+        Alcohol Consumption Prediction •
+        Machine Learning Regression Project
+    </p>
+
+</footer>
+
+
+
+<!-- =====================================================
+     CHART DATA
+
+     Jinja is kept outside executable JavaScript.
+===================================================== -->
+
+<script
+    id="chart-data"
+    type="application/json"
+>
+{
+    "continentLabels": {{ continent_labels | safe }},
+    "continentValues": {{ continent_values | safe }},
+    "topCountryLabels": {{ top_country_labels | safe }},
+    "topCountryValues": {{ top_country_values | safe }},
+    "beverageLabels": {{ beverage_labels | safe }},
+    "beverageValues": {{ beverage_values | safe }}
+}
+</script>
+
+
+
+<!-- =====================================================
+     CHART JAVASCRIPT
+===================================================== -->
+
+<script>
+
+const chartDataElement =
+    document.getElementById("chart-data");
+
+const chartData =
+    JSON.parse(
+        chartDataElement.textContent
+    );
+
+
+const continentLabels =
+    chartData.continentLabels;
+
+const continentValues =
+    chartData.continentValues;
+
+
+const topCountryLabels =
+    chartData.topCountryLabels;
+
+const topCountryValues =
+    chartData.topCountryValues;
+
+
+const beverageLabels =
+    chartData.beverageLabels;
+
+const beverageValues =
+    chartData.beverageValues;
+
+
+
+/* GLOBAL CHART SETTINGS */
+
+Chart.defaults.color =
+    "#9ca3af";
+
+Chart.defaults.font.family =
+    "Inter, Arial, sans-serif";
+
+
+
+/* =====================================================
+   CONTINENT CHART
+===================================================== */
+
+new Chart(
+
+    document.getElementById(
+        "continentChart"
+    ),
+
+    {
+
+        type: "bar",
+
+        data: {
+
+            labels:
+                continentLabels,
+
+            datasets: [
+
+                {
+
+                    label:
+                        "Average Litres of Pure Alcohol",
+
+                    data:
+                        continentValues,
+
+                    backgroundColor:
+                        "rgba(124,92,255,0.75)",
+
+                    borderColor:
+                        "#8b72ff",
+
+                    borderWidth:
+                        1,
+
+                    borderRadius:
+                        8
+
+                }
+
+            ]
+
+        },
+
+
+        options: {
+
+            responsive:
+                true,
+
+            maintainAspectRatio:
+                false,
+
+
+            plugins: {
+
+                legend: {
+
+                    display:
+                        false
+
+                },
+
+
+                tooltip: {
+
+                    callbacks: {
+
+                        label: function(context) {
+
+                            return (
+                                "Average: " +
+                                context.parsed.y +
+                                " litres"
+                            );
+
+                        }
+
+                    }
+
+                }
+
+            },
+
+
+            scales: {
+
+                x: {
+
+                    grid: {
+
+                        display:
+                            false
+
+                    }
+
+                },
+
+
+                y: {
+
+                    beginAtZero:
+                        true,
+
+                    title: {
+
+                        display:
+                            true,
+
+                        text:
+                            "Average Litres"
+
+                    },
+
+                    grid: {
+
+                        color:
+                            "rgba(255,255,255,0.06)"
+
+                    }
+
+                }
+
+            }
+
+        }
+
+    }
+
+);
+
+
+
+/* =====================================================
+   BEVERAGE CHART
+===================================================== */
+
+new Chart(
+
+    document.getElementById(
+        "beverageChart"
+    ),
+
+    {
+
+        type:
+            "doughnut",
+
+
+        data: {
+
+            labels:
+                beverageLabels,
+
+
+            datasets: [
+
+                {
+
+                    data:
+                        beverageValues,
+
+                    backgroundColor: [
+
+                        "#7c5cff",
+                        "#22c55e",
+                        "#f59e0b"
+
+                    ],
+
+                    borderWidth:
+                        0
+
+                }
+
+            ]
+
+        },
+
+
+        options: {
+
+            responsive:
+                true,
+
+            maintainAspectRatio:
+                false,
+
+            cutout:
+                "65%",
+
+
+            plugins: {
+
+                legend: {
+
+                    position:
+                        "bottom",
+
+                    labels: {
+
+                        padding:
+                            20,
+
+                        usePointStyle:
+                            true
+
+                    }
+
+                },
+
+
+                tooltip: {
+
+                    callbacks: {
+
+                        label: function(context) {
+
+                            return (
+                                context.label +
+                                ": " +
+                                context.parsed.toFixed(2) +
+                                " average servings"
+                            );
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        }
+
+    }
+
+);
+
+
+
+/* =====================================================
+   COUNTRY CHART
+===================================================== */
+
+new Chart(
+
+    document.getElementById(
+        "countryChart"
+    ),
+
+    {
+
+        type:
+            "bar",
+
+
+        data: {
+
+            labels:
+                topCountryLabels,
+
+
+            datasets: [
+
+                {
+
+                    label:
+                        "Total Litres of Pure Alcohol",
+
+                    data:
+                        topCountryValues,
+
+                    backgroundColor:
+                        "rgba(34,197,94,0.75)",
+
+                    borderColor:
+                        "#22c55e",
+
+                    borderWidth:
+                        1,
+
+                    borderRadius:
+                        7
+
+                }
+
+            ]
+
+        },
+
+
+        options: {
+
+            indexAxis:
+                "y",
+
+            responsive:
+                true,
+
+            maintainAspectRatio:
+                false,
+
+
+            plugins: {
+
+                legend: {
+
+                    display:
+                        false
+
+                }
+
+            },
+
+
+            scales: {
+
+                y: {
+
+                    grid: {
+
+                        display:
+                            false
+
+                    }
+
+                },
+
+
+                x: {
+
+                    beginAtZero:
+                        true,
+
+                    title: {
+
+                        display:
+                            true,
+
+                        text:
+                            "Total Litres of Pure Alcohol"
+
+                    },
+
+                    grid: {
+
+                        color:
+                            "rgba(255,255,255,0.06)"
+
+                    }
+
+                }
+
+            }
+
+        }
+
+    }
+
+);
+
+</script>
+
+
+</body>
+
+</html>

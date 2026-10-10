@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="Machine learning alcohol consumption prediction application."
+    >
+
+    <title>
+        Alcohol Consumption Predictor
+    </title>
+
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     NAVBAR
+===================================================== -->
+
+<nav class="navbar">
+
+    <div class="logo">
+
+        <div class="logo-icon">
+            A
+        </div>
+
+        <div>
+
+            <span>
+                Alcohol
+            </span>
+
+            <strong>
+                Analytics
+            </strong>
+
+        </div>
+
+    </div>
+
+
+    <div class="nav-links">
+
+        <a href="{{ url_for('home') }}">
+            Dashboard
+        </a>
+
+        <a
+            href="{{ url_for('predict') }}"
+            class="active"
+        >
+            Predict
+        </a>
+
+    </div>
+
+</nav>
+
+
+
+<!-- =====================================================
+     PREDICTION PAGE
+===================================================== -->
+
+<section class="prediction-page">
+
+
+    <!-- HEADER -->
+
+    <div class="prediction-header">
+
+        <span class="hero-tag">
+            MACHINE LEARNING PREDICTION
+        </span>
+
+
+        <h1>
+
+            Alcohol Consumption
+
+            <span>
+                Predictor
+            </span>
+
+        </h1>
+
+
+        <p>
+
+            Select a country and enter its beer,
+            spirit and wine serving information
+            to estimate total litres of pure
+            alcohol consumption.
+
+        </p>
+
+    </div>
+
+
+
+    <!-- MAIN LAYOUT -->
+
+    <div class="prediction-layout">
+
+
+        <!-- =================================================
+             INPUT FORM
+        ================================================== -->
+
+        <div class="prediction-form-card">
+
+
+            <div class="form-heading">
+
+                <span>
+                    INPUT FEATURES
+                </span>
+
+                <h2>
+                    Consumption Details
+                </h2>
+
+                <p>
+
+                    Select a country and enter the
+                    annual serving information.
+
+                    The continent will be selected
+                    automatically from the dataset.
+
+                </p>
+
+            </div>
+
+
+
+            <form
+                action="{{ url_for('predict') }}"
+                method="POST"
+            >
+
+
+                <!-- COUNTRY / CONTINENT -->
+
+                <div class="form-row">
+
+
+                    <!-- COUNTRY -->
+
+                    <div class="form-group">
+
+                        <label for="country">
+
+                            Country
+
+                        </label>
+
+
+                        <select
+                            id="country"
+                            name="country"
+                            required
+                        >
+
+                            <option
+                                value=""
+                                disabled
+                                {% if not selected_country %}
+                                selected
+                                {% endif %}
+                            >
+                                Select a country
+                            </option>
+
+
+                            {% for country in countries %}
+
+                            <option
+                                value="{{ country }}"
+
+                                {% if country == selected_country %}
+                                selected
+                                {% endif %}
+                            >
+
+                                {{ country }}
+
+                            </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+
+
+                    <!-- CONTINENT -->
+
+                    <div class="form-group">
+
+                        <label for="continent">
+
+                            Continent
+
+                            <span class="auto-label">
+                                AUTO
+                            </span>
+
+                        </label>
+
+
+                        <select
+                            id="continent"
+                            name="continent"
+                            class="locked-select"
+                            required
+                            tabindex="-1"
+                        >
+
+                            <option
+                                value=""
+                                disabled
+                                {% if not selected_continent %}
+                                selected
+                                {% endif %}
+                            >
+                                Select country first
+                            </option>
+
+
+                            {% for continent in continents %}
+
+                            <option
+                                value="{{ continent }}"
+
+                                {% if continent == selected_continent %}
+                                selected
+                                {% endif %}
+                            >
+
+                                {{ continent }}
+
+                            </option>
+
+                            {% endfor %}
+
+                        </select>
+
+
+                        <small class="field-note">
+
+                            Automatically determined
+                            from the selected country.
+
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- NUMERICAL FEATURES -->
+
+                <div class="serving-title">
+
+                    <span>
+                        NUMERICAL FEATURES
+                    </span>
+
+                    <h3>
+                        Annual Servings
+                    </h3>
+
+                </div>
+
+
+
+                <div class="numeric-grid">
+
+
+                    <!-- BEER -->
+
+                    <div class="form-group">
+
+                        <label for="beer_servings">
+
+                            <span class="input-icon">
+                                🍺
+                            </span>
+
+                            Beer Servings
+
+                        </label>
+
+
+                        <input
+                            type="number"
+                            id="beer_servings"
+                            name="beer_servings"
+                            min="0"
+                            step="1"
+                            placeholder="e.g. 120"
+                            value="{{ beer }}"
+                            required
+                        >
+
+                    </div>
+
+
+
+                    <!-- SPIRIT -->
+
+                    <div class="form-group">
+
+                        <label for="spirit_servings">
+
+                            <span class="input-icon">
+                                🥃
+                            </span>
+
+                            Spirit Servings
+
+                        </label>
+
+
+                        <input
+                            type="number"
+                            id="spirit_servings"
+                            name="spirit_servings"
+                            min="0"
+                            step="1"
+                            placeholder="e.g. 80"
+                            value="{{ spirit }}"
+                            required
+                        >
+
+                    </div>
+
+
+
+                    <!-- WINE -->
+
+                    <div class="form-group">
+
+                        <label for="wine_servings">
+
+                            <span class="input-icon">
+                                🍷
+                            </span>
+
+                            Wine Servings
+
+                        </label>
+
+
+                        <input
+                            type="number"
+                            id="wine_servings"
+                            name="wine_servings"
+                            min="0"
+                            step="1"
+                            placeholder="e.g. 40"
+                            value="{{ wine }}"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- INFORMATION -->
+
+                <div class="info-box">
+
+                    <span>
+                        ℹ
+                    </span>
+
+                    <p>
+
+                        The deployed Linear Regression
+                        model achieved an R² score of
+                        0.9468 on the evaluation data.
+
+                        Country and continent are processed
+                        as categorical features while the
+                        three serving values are numerical
+                        features.
+
+                    </p>
+
+                </div>
+
+
+
+                <!-- BUTTON -->
+
+                <button
+                    type="submit"
+                    class="predict-btn"
+                >
+
+                    Generate Prediction
+
+                    <span>
+                        →
+                    </span>
+
+                </button>
+
+
+            </form>
+
+        </div>
+
+
+
+        <!-- =================================================
+             RESULT COLUMN
+        ================================================== -->
+
+        <div class="result-column">
+
+
+            <!-- SUCCESS -->
+
+            {% if prediction is not none %}
+
+
+            <div class="result-card success-result">
+
+
+                <div class="result-icon">
+                    ✓
+                </div>
+
+
+                <span>
+                    PREDICTED CONSUMPTION
+                </span>
+
+
+                <h2>
+
+                    {{ prediction }}
+
+                    <small>
+                        litres
+                    </small>
+
+                </h2>
+
+
+                <p>
+
+                    Estimated total litres of pure
+                    alcohol consumption based on the
+                    supplied input features.
+
+                </p>
+
+
+
+                <div class="result-details">
+
+
+                    <div>
+
+                        <span>
+                            Country
+                        </span>
+
+                        <strong>
+                            {{ selected_country }}
+                        </strong>
+
+                    </div>
+
+
+
+                    <div>
+
+                        <span>
+                            Continent
+                        </span>
+
+                        <strong>
+                            {{ selected_continent }}
+                        </strong>
+
+                    </div>
+
+
+
+                    <div>
+
+                        <span>
+                            Beer
+                        </span>
+
+                        <strong>
+                            {{ beer }}
+                        </strong>
+
+                    </div>
+
+
+
+                    <div>
+
+                        <span>
+                            Spirit
+                        </span>
+
+                        <strong>
+                            {{ spirit }}
+                        </strong>
+
+                    </div>
+
+
+
+                    <div>
+
+                        <span>
+                            Wine
+                        </span>
+
+                        <strong>
+                            {{ wine }}
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- ERROR -->
+
+            {% elif error %}
+
+
+            <div class="result-card error-result">
+
+
+                <div class="result-icon">
+                    !
+                </div>
+
+
+                <span>
+                    PREDICTION ERROR
+                </span>
+
+
+                <h3>
+                    Unable to Predict
+                </h3>
+
+
+                <p>
+                    {{ error }}
+                </p>
+
+            </div>
+
+
+
+            <!-- WAITING -->
+
+            {% else %}
+
+
+            <div class="result-card waiting-result">
+
+
+                <div class="result-graphic">
+
+                    <div
+                        class="circle circle-one"
+                    ></div>
+
+                    <div
+                        class="circle circle-two"
+                    ></div>
+
+                    <div class="center-circle">
+                        ML
+                    </div>
+
+                </div>
+
+
+                <span>
+                    READY TO PREDICT
+                </span>
+
+
+                <h3>
+                    Your result will appear here
+                </h3>
+
+
+                <p>
+
+                    Complete the input form and click
+                    Generate Prediction to run the
+                    trained regression model.
+
+                </p>
+
+            </div>
+
+
+            {% endif %}
+
+
+
+            <!-- MODEL INFO -->
+
+            <div class="model-mini-card">
+
+                <span>
+                    DEPLOYED MODEL
+                </span>
+
+
+                <h3>
+                    Linear Regression
+                </h3>
+
+
+                <div class="mini-stats">
+
+
+                    <div>
+
+                        <strong>
+                            0.9468
+                        </strong>
+
+                        <small>
+                            R²
+                        </small>
+
+                    </div>
+
+
+                    <div>
+
+                        <strong>
+                            0.5219
+                        </strong>
+
+                        <small>
+                            MAE
+                        </small>
+
+                    </div>
+
+
+                    <div>
+
+                        <strong>
+                            0.9453
+                        </strong>
+
+                        <small>
+                            RMSE
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<footer>
+
+    <p>
+
+        Alcohol Consumption Prediction •
+        Machine Learning Regression Project
+
+    </p>
+
+</footer>
+
+
+
+<!-- =====================================================
+     COUNTRY -> CONTINENT DATA
+
+     Flask converts the Python dictionary to JSON.
+===================================================== -->
+
+<script
+    id="country-continent-data"
+    type="application/json"
+>
+{{ country_continent_map | tojson }}
+</script>
+
+
+
+<!-- =====================================================
+     COUNTRY -> CONTINENT JAVASCRIPT
+===================================================== -->
+
+<script>
+
+const mappingElement =
+    document.getElementById(
+        "country-continent-data"
+    );
+
+
+const countryContinentMap =
+    JSON.parse(
+        mappingElement.textContent
+    );
+
+
+const countrySelect =
+    document.getElementById(
+        "country"
+    );
+
+
+const continentSelect =
+    document.getElementById(
+        "continent"
+    );
+
+
+
+function updateContinent() {
+
+    const selectedCountry =
+        countrySelect.value;
+
+
+    const correctContinent =
+        countryContinentMap[
+            selectedCountry
+        ];
+
+
+    if (correctContinent) {
+
+        continentSelect.value =
+            correctContinent;
+
+    }
+
+    else {
+
+        continentSelect.value =
+            "";
+
+    }
+
+}
+
+
+
+countrySelect.addEventListener(
+    "change",
+    updateContinent
+);
+
+
+
+/*
+If the page reloads after prediction,
+make sure the displayed continent
+still matches the selected country.
+*/
+
+if (countrySelect.value) {
+
+    updateContinent();
+
+}
+
+</script>
+
+
+</body>
+
+</html>
